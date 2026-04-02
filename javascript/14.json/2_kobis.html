@@ -9,22 +9,26 @@
 </head>
 <body>
     <h1>KOBIS BOX OFFICE</h1>
-    <h3> 박스 오피스 조회 범위 : 
+    <h3>타입: 
         <select name="type" id="type">
             <option value="default">선택</option>
-            <option value="Daily">일간</option>
-            <option value="Weekly">주간</option>
+            <option value="Daily">일별</option>
+            <option value="Weekly">주간/주말</option>
         </select>
     </h3>
-    <h3>날짜 : <input type="date" id="sdate"><button type="button" onclick="handleBoxOffice()">검색</button></h3>
+    <h3>날짜 : <input type='date' id="sdate">
+        <button type='button' onclick="handleBoxOffice()">실행</button></h3>
     <div id="content"></div>
 
     <!-- 모달 -->
-    <div id="modal" style="display: none;">
-        <div id="modal-content">
-            <span id="modal-close">✖</span>
-            <div id="modal-body"></div>
-        </div>
+    <div id="modal" style="display:none;">
+    <div id="modal-content">
+        <span id="modal-close">✕</span>
+        <div id="modal-body"></div>
     </div>
+
+</div>
+
+
 </body>
 </html>

@@ -1,23 +1,26 @@
 let key = '75eaff2b6851a5a576005482ea148a43';
 // let targetDt = `20260101`;
 
-const getJson = async(type, date) => {
-    const data_url = `https://kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/search${type}BoxOfficeList.json?key=${key}&targetDt=${date}`;
+const getJson = async(type, targetDt) => {
+    const data_url = `http://kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/search${type}BoxOfficeList.json?key=${key}&targetDt=${targetDt}`;
     let response = await fetch(data_url);
     return response.json();
 }
 
-const getMovieInfo = async(movieCd) => {
-    const info_url = `https://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieInfo.json?key=${key}&movieCd=${movieCd}`;
-    let response = await fetch(info_url);
+const getMovieInfo = async(movieCd) => { 
+    //영화상세  API를 통해 json 객체 가져오기
+    let url = `http://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieInfo.json?key=${key}&movieCd=${movieCd}`;
+    let response = await fetch(url);
     return response.json();
 }
 
-/* openModal 띄우기 */
+/** openModal */
 const openModal = (infoObj) => {
+    // console.log('infoObj-->',infoObj);
     let modal = document.querySelector('#modal');
     let modalBody = document.querySelector('#modal-body');
     let modalClose = document.querySelector('#modal-close');
+    let posters = infoObj.posterObj.split(",");
 
     modalClose.addEventListener('click', () => {
         modal.style.display = 'none';
@@ -27,79 +30,121 @@ const openModal = (infoObj) => {
     let output = `
         <h3>[${infoObj.rank}]${infoObj.movieNm}</h3>
         <ul>
-            <li><label>감독 : </label> ${infoObj.director}</li>
-            <li><label>배우 : </label> ${infoObj.actors}</li>
+            <li>
+                ${
+                    posters.map(poster => `
+                            <img src="${poster}" style="width:100px;">
+                        `).join("")
+                }
+                
+            </li>
+            <li><label>🎞감독 : </label> ${infoObj.director}</li>
+            <li><label>🧑배우 : </label> ${infoObj.actors}</li>
         </ul>
-    `
+    `;
 
     modal.style.display = 'flex';
     modalBody.innerHTML = output;
 }
 
-const handleMovieInfo = async(movieCd, rank) => {
-    // 배우들 따로 모달로 띄우기 위해 함수 별도 생성.
-    let info = await getMovieInfo(movieCd)
+const handleMovieInfo = async (movieCd, rank, poster, posterObj) => {
+    let info = await getMovieInfo(movieCd);
     let movieNm = info.movieInfoResult.movieInfo.movieNm;
     let director = info.movieInfoResult.movieInfo.directors[0].peopleNm;
     let actors = info.movieInfoResult.movieInfo.actors[0].peopleNm;
 
-    openModal({movieNm, director, actors, rank});
+    console.log(info, movieNm, director, actors); 
+    openModal({movieNm, director, actors, rank, poster, posterObj});
 }
 
-// handleBoxOffice 함수 정의
-const handleBoxOffice = async() => {
-    let stype = document.querySelector('#type').value;
-    let sdate = document.querySelector('#sdate').value;
+//poster 가져오기 : KMDB API
+const searchMoviePoster = async (movieNm, openDt) => {
+    const key = '59H5F0U0OFQB3R2261VM';
+    let kmdb_url = `http://api.koreafilm.or.kr/openapi-data2/wisenut/search_api`;
+    kmdb_url += `/search_json2.jsp?collection=kmdb_new2&detail=Y`;
+    kmdb_url += `&title=${movieNm}`;
+    kmdb_url += `&releaseDts=${openDt}&ServiceKey=${key}`;
 
-    if (stype === 'default') {
-        alert('조회 범위를 선택해주세요');
-        document.querySelector('#type').focus();
-    } else if (sdate === '') {
+    let response = await fetch(kmdb_url);
+    let kmdb = await response.json(); 
+    let data = kmdb?.Data?.[0]?.Result;
+    let poster = null;
+    if(data === null && data.length === 0) {
+        // poster = [];
+        return [];
+    } else {
+        return await kmdb?.Data[0]?.Result[0]?.posters.split("|");
+    }
+    // return poster;
+}
+
+
+//handleBoxOffice 함수 정의
+const handleBoxOffice = async() => {
+    let type = document.querySelector('#type').value;
+    let sdate = document.querySelector('#sdate').value;  
+    
+    if(type === 'default') {
+        alert('타입을 선택해주세요');
+        document.querySelector('#type').focus();        
+    } else if(sdate === '') {
         alert('날짜를 선택해주세요');
         document.querySelector('#sdate').focus();
-    } else {    // 이 날짜 형식을 출력하면 2026-01-01 식으로 들어가고, 위에 targetDt 에는 20260101 식으로 들어가야 하므로 '-' 을 제거해야 함.
-        targetDt = sdate.split("-").reduce((acc, cur) => acc + cur);    // reduce 는 원래 합을 구하는 거지만, 문자형의 경우 접합연산자 역할을 함.
-        // console.log(sdate, typeof sdate);
-        // console.log(targetDt);
-
-        let kobis = await getJson(stype, targetDt);    // getJson 에 입력받는 날짜를 가지고 감. 이후 getJson 에서 갖고 간 날짜 출력.
-        let kobisbox = kobis.boxOfficeResult;
-        let kobisboxlist = null;
-
-        if (stype === 'Daily'){
-            kobisboxlist = kobis.boxOfficeResult.dailyBoxOfficeList;
+    } else {
+        targetDt = sdate.split("-").reduce((acc, cur)=> acc+cur);
+        let kobis = await getJson(type, targetDt); 
+        let kobisBoxOffice =  kobis.boxOfficeResult;
+        let kobisBoxOfficeList = null;
+        let posterList = [];
+        let posterObjects = [];
+        if(type === 'Daily') {
+            kobisBoxOfficeList =  kobis.boxOfficeResult.dailyBoxOfficeList;
         } else {
-            kobisboxlist = kobis.boxOfficeResult.weeklyBoxOfficeList;
+            kobisBoxOfficeList =  kobis.boxOfficeResult.weeklyBoxOfficeList;
         }
-        // <h3>${kobis.boxOfficeResult.showRange}</h3> 라고 주는 걸 앞에 kobis.boxOfficeResult 를 변수로 지정하여 짧게 쓰게 함.
-
+        console.log(kobis);
+        
+        for(const movie of kobisBoxOfficeList) {
+            //영화제목(movieNm), 개봉일(openDt)
+            let movieNm = movie.movieNm;
+            let openDt = movie.openDt.split("-").reduce((acc, cur)=>acc+cur);
+            let posters = await searchMoviePoster(movieNm, openDt);        
+            posterObjects.push(posters);    
+            if(posters.length !== 0)  posterList.push(posters[0]);   
+            else posterList.push('');
+        }
+        console.log(posterObjects);
+    
         let output = `
-            <h1>${kobisbox.boxofficeType}</h1>
-            <h3>${kobisbox.showRange}</h3>
+            <h1>${kobisBoxOffice.boxofficeType}</h1>
+            <h3>${kobisBoxOffice.showRange}</h3>
             <table border=1>
                 <tr>
                     <th>순위</th>
                     <th>영화제목</th>
                     <th>개봉일</th>
-                    <th>당일 관객수 (명)</th>
-                    <th>누적 관객수 (명)</th>
-                    <th>누적 매출액 (원)</th>
+                    <th>당일관객수</th>
+                    <th>누적관객수</th>
+                    <th>누적매출액</th>
                 </tr>
-                ${kobisboxlist.map((item) =>
-                    `
-                    <tr>
-                        <td>${item.rank}</td>
-                        <td><a href='#' onclick="handleMovieInfo(${item.movieCd}, ${item.rank})">${item.movieNm}</a></td>
-                        <td>${item.openDt}</td>
-                        <td>${parseInt(item.audiCnt).toLocaleString()}</td>
-                        <td>${parseInt(item.audiAcc).toLocaleString()}</td>
-                        <td>${parseInt(item.salesAcc).toLocaleString()}</td>
-                    </tr>
-                    `
-                ).join("")  // parseInt : 정수로 나타내기, toLocalsSrting : 3자리 마다 ',' 추가
+                ${
+                    kobisBoxOfficeList.map((movie, idx) => `
+                        <tr>
+                            <td>${movie.rank}</td>
+                            <td>
+                                <img src="${posterList[idx]}" style="width:80px;">
+                                <a href="#" onclick="handleMovieInfo(${movie.movieCd}, ${movie.rank}, '${posterList[idx]}', '${posterObjects[idx]}')">${movie.movieNm}</a></td>
+                            <td>${movie.openDt}</td>
+                            <td>${parseInt(movie.audiCnt).toLocaleString()}</td>
+                            <td>${parseInt(movie.audiAcc).toLocaleString()}</td>
+                            <td>${parseInt(movie.salesAcc).toLocaleString()}</td>
+                        </tr>
+                    `).join("")
                 }
             </table>
         `;
-        document.querySelector("#content").innerHTML = output;
-    }
+
+        document.querySelector('#content').innerHTML = output;
+    } 
+    
 }
