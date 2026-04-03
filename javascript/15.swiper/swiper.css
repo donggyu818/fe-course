@@ -1,0 +1,13 @@
+.swiper {
+    border: 1px solid gray;
+    width: 1200px;
+    height: 500px;
+}
+.swiper-img {
+    width: 100%;
+}
+
+
+.swiper-button-color {
+    color : rgb(196, 196, 196)
+}

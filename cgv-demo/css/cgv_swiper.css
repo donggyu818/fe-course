@@ -1,0 +1,16 @@
+.swiper {
+    width: 1555px;
+    height: 560px;
+}
+.swiper-img {
+    width: 90%;
+    margin-left: 77px;
+}
+
+.swiper-button-color {
+    color : rgb(196, 196, 196);
+    height: 50px;
+}
+.swiper-scrollbar-color {
+    background-color: rgb(205, 205, 205);
+}

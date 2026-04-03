@@ -581,7 +581,8 @@ footer {
     outline: none;
 }
 .join-form ul li:first-child button,
-.join-form ul li:last-child button{
+.join-form ul li:last-child button,
+.join-form ul li div button {
     border: 1px solid white;
     width: 100px;
     padding: 7px 12px;
@@ -595,7 +596,8 @@ footer {
     width: 150px;
     padding: 10px 0;
 }
-.join-form ul li:last-child button:last-child {
+.join-form ul li:last-child button:last-child,
+.join-form ul li div button {
     background-color: var(--color-gray-222);
 }
 .join-form ul li:last-child {

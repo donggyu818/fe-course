@@ -6,6 +6,12 @@
     <title>CGV-Demo</title>
     <link rel="stylesheet" href="css/cgv.css">
     <link rel="stylesheet" href="css/commons.css">
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
+    <script src="js/cgv_swiper.js"></script>
+    <link rel="stylesheet" href="css/cgv_swiper.css">
 </head>
 <body>
     <!-- header -->
@@ -15,8 +21,25 @@
     <div class="content">
         <!-- 영화 예고편 : swiper -->
         <div class="content-top">
-            <!-- 임시용. 나중에 넘어가는 페이지 만들 공간 -->
-            <div style="width: 100%; height: 400px; background-color: gray;"></div>
+            <!-- Slider main container -->
+            <div class="swiper">
+                <!-- Additional required wrapper -->
+                <div class="swiper-wrapper">
+                <!-- Slides -->
+                <div class="swiper-slide"><img src="../images/swiper/img1.jpg" alt="swiper Img1" class="swiper-img"></div>
+                <div class="swiper-slide"><img src="../images/swiper/img2.jpg" alt="swiper Img2" class="swiper-img"></div>
+                <div class="swiper-slide"><img src="../images/swiper/img3.jpg" alt="swiper Img3" class="swiper-img"></div>
+                </div>
+                <!-- If we need pagination -->
+                <div class="swiper-pagination"></div>
+
+                <!-- If we need navigation buttons -->
+                <div class="swiper-button-prev swiper-button-color"></div>
+                <div class="swiper-button-next swiper-button-color"></div>
+
+                <!-- If we need scrollbar -->
+                <div class="swiper-scrollbar swiper-scrollbar-color"></div>
+            </div>
         </div>
 
         <!-- 무비차트 리스트 -->
