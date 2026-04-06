@@ -273,7 +273,7 @@ footer {
     border-radius: 15px;
     width: 170px;
 }
-.content-moviechart-list ul li h3{
+.content-moviechart-list ul li h4{
     text-align: center;
     padding: 10px 0;
     color: var(--color-primary);

@@ -17,7 +17,8 @@ window.addEventListener('DOMContentLoaded', () => {
         }
     });
     // 테이블 생성
-    createTable();
+    // createTable();
+    filterMenu('all');  
 })
 
 // support.json JSON 에디터 가져오기
@@ -26,12 +27,32 @@ async function getJson() {
     return response.json();
 }
 
-async function createTable() {
-    let list = await getJson();
-    console.log(list);
+// filterData 함수 생성
+async function filterData (type) {
+    let data = await getJson();
+    // console.log('data => ', data, type);
+    if(type === 'all') {
+        return data;
+    } else {
+    return data.filter(item => item.type === type);        // 가져온 배열의 타입이 일치할 때 출력. 단, all 은 전체 출력.
+    }
+}
+
+// filterMenu 는 onclick 으로 줬기 때문에 DOM 이 생성되고 줘야할 필요가 없음. 단독 함수 지정해도 됨.
+async function filterMenu (type) {
+    console.log(type);
+    let filterList = await filterData(type);
+    // return filterList;
+    createTable(filterList);
+    
+}
+
+async function createTable(list) {
+    // let list = await getJson();
+    // console.log(list);
     
     let output = `
-                <table>
+                <table id="stable">
                     <thead>
                         <tr>
                             <th>번호</th>
@@ -62,6 +83,7 @@ async function createTable() {
                     </tfoot>
                 </table>
     `;
+    document.querySelector('#stable')?.remove();    // stable 이 존재하면 지워라
     document.querySelector('#before-table').insertAdjacentHTML('afterend', output);
                         // before-table 클래스 바로 뒤에 output 적용.
 
