@@ -1,9 +1,8 @@
-import './Body.css';
 
-export default function Body () {
+import style from './Body.module.css'
+
+export default function Body() {
     return (
-        <>
-            <h1 className='body'>Body</h1>
-        </>
+        <button className={style.button}>Body :: 클릭하세요</button>
     )
 }

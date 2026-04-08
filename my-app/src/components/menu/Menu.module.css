@@ -1,0 +1,14 @@
+.menu1 {
+    border: 1px solid blue;
+    padding: 5px 10px;
+    text-decoration: none;
+    background-color: antiquewhite;
+    color: #000;
+}
+.menu2 {
+    border: 1px solid blue;
+    padding: 5px 10px;
+    text-decoration: none;
+    background-color: tomato;
+    color: white;
+}

@@ -133,3 +133,68 @@
                 import 'CSS 파일 위치';
                     ~
                 <h1 className="body"> CSS 클래스명 적용 </h1>
+
+7. 컴포넌트에 값 전달하기
+    (1) Props 란?
+        - 부모 컴포넌트가 자식 컴포넌트에게 전달하는 단일 *객체*(Properties 약자)
+        - 단방향으로만 전달 가능함 : 부모 -> 자식
+
+    (2) Props 전달 방식
+        1) 기본적인 전달
+            function Parent() {
+                return(
+                    <Child name="홍길동" />
+                )
+            }
+            function Child(props) { // props= {name: "홍길동"} 형태로 넘어옴. props 는 다른 거로 해도 됨.
+                return(
+                    <h1>Hello~ My name is {props.name}</h1>
+                )
+            }
+        2) 구조 분해 할당 ( {} => 구조분해 할당 )
+            function Parent() {
+                return(
+                    <Child name="홍길동" />
+                )
+            }
+            function Child({name}){
+                return(
+                    <h1>Hello~ My name is {name}</h1>
+                )
+            }
+        3) 스프레드 연산자
+            function Parent() {
+            let info = {
+                name : "홍길동",
+                age: "20",
+                address: "서울시"
+            }
+                return(
+                    <Child {...info} />
+                )
+            }
+            function Child({name, age}) {
+                return(
+                    <h1>Hello~ My name is {name}, {age}</h1>
+                )
+            }
+        4) Props 로 컴포넌트 전달하기
+            function PropsComp() {
+                return (
+                    <h1>PropsComponent</h1>
+                )
+            }
+            function Parent() {
+                return(
+                    <Child>
+                        <PropsComp />
+                    </Child>
+                )
+            }
+            function Child({ children }) {      // 소문자여야 함.
+                return(
+                    <h1>Hello~</h1>
+                    {children}
+                )
+            }
+        
