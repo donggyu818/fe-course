@@ -1,11 +1,10 @@
-
-// import style from './Avatar.module.css';
-import people1 from '../../assets/people1.webp';
+import Image from '../../common/Image.jsx';
 
 export default function AvatarImage({img, style}) {
     return(
         <>
-            <img src={img} alt="photo1" className={style}/>
+            {/* <img src={img} alt="photo1" className={style}/> */}
+            <Image img={img} alt="photo1" className={style} />
         </>
     )
 }

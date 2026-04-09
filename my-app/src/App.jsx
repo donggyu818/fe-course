@@ -45,7 +45,7 @@ export default function App() {
 
       {/* 이미지 링크 걸기 */}
       <AvatarImage img={people1} style={style.avatar_img} />
-      <Avatar name="Anne" image={people3} />
+      <Avatar name="Anne" img={people3} />
       <AvatarImageList imgList={list} />
       <AvatarList List={alist} />
     </>
