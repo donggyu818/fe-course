@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import BasicCounter from './components/counter/BasicCounter.jsx';
+import Counter from './components/counter/Counter.jsx';
 
 export default function App() {
     // let totalCount = 0;     // 값이 변경되어도 자동 리렌더링❌
@@ -17,6 +18,8 @@ export default function App() {
             <BasicCounter click={handleTotalCount} total={totalCount} />
             <BasicCounter click={handleTotalCount} total={totalCount} />
             <BasicCounter click={handleTotalCount} total={totalCount} />
+            <hr />
+            <Counter />
         </>
     )
 }
