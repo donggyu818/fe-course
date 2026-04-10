@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CGV-Demo</title>
+    <link rel="stylesheet" href="../css/cgv.css">
+    <link rel="stylesheet" href="../css/commons.css">
+    <script src="../js/cgv_join.js"></script>
+</head>
+<body>
+    <!-- header -->
+    <iframe src="../header.html" frameborder="0" width="100%" height="150px"></iframe>
+
+    <!-- content start -->
+    <div class="content">
+        <div class="join-form center-layout">
+            <h1 class="center-title">회원가입</h1>
+            <form action="#" method="post">
+                <ul>
+                    <li>
+                        <label for=""><b>아이디</b></label>       <!-- 아래 input name 이랑 같아야 함. 이후 span 에 id를 부여하려고 지움. -->
+                        <!-- <span>이미 사용중인 아이디 입니다.</span> -->      <!-- 서버랑 연결해야 원할하게 동작함. -->
+                        <span id="idMsg">아이디를 입력해주세요.</span>
+                        <div>
+                            <input type="text" name="id" id="id" placeholder="아이디 입력(6자~20자)">
+                            <button>중복확인</button>
+                        </div>
+                    </li>
+                    <li>
+                        <label for=""><b>비밀번호</b></label>
+                        <span id="pwdMsg">12자 이내의 비밀번호를 입력해주세요.</span>
+                        <div>
+                            <input type="password" name="pwd" id="pwd" placeholder="비밀번호 입력(문자, 숫자, 특수문자 포함 6~12자)">
+                        </div>
+                    </li>
+                    <li>
+                        <label for=""><b>비밀번호 확인</b></label>
+                        <span id="cpwdMsg">비밀번호가 일치하지 않습니다.</span>
+                        <div>
+                            <input type="password" name="cpwd" id="cpwd" placeholder="비밀번호 재입력">
+                        </div>
+                    </li>
+                    <li>
+                        <label for=""><b>이름</b></label>
+                        <span id="nameMsg">이름을 입력해주세요.</span>
+                        <div>
+                            <input type="text" name="name" id="name" placeholder="이름을 입력해주세요">
+                        </div>
+                    </li>
+                    <li>
+                        <label for="phone"><b>전화번호</b></label>
+                        <span>전화번호를 입력해주세요.</span>
+                        <div> <!-- 여기 해보기 (개인적) -->
+                            <select name="phonefront" id="phonefront">
+                                <option value="default">선택</option>
+                                <option value="010">010</option>
+                                <option value="011">011</option>
+                                <option value="019">019</option>
+                                <option value="070">070</option>
+                            </select>
+                            <span>-</span>
+                            <input type="text" name="phone" id="phone" placeholder="1234">
+                            <span>-</span>
+                            <input type="text" name="phone" id="phone" placeholder="5678">
+                        </div>
+                    </li>
+                    <li>
+                        <label for="emailname"><b>이메일</b></label>
+                        <span>이메일 주소를 입력해주세요.</span>
+                        <div>
+                            <input type="text" name="emailname" id="emailname" placeholder="이메일 주소를 입력해주세요">
+                            <span>@</span>
+                            <select name="emaildomain" id="emaildomain">
+                                <option value="default">선택</option>
+                                <option value="naver.com">naver.com</option>
+                                <option value="daum.com">daum.net</option>
+                                <option value="gmail.com">gmail.com</option>
+                            </select>
+                            <button style="width: 150px;">중복확인</button>
+                        </div>
+                    </li>
+                    <li>
+                        <button type="button" id="btnSignup">가입하기</button>
+                        <button type="button" id="btnReset">다시쓰기</button>
+                    </li>
+                </ul>
+            </form>
+        </div>
+    </div>
+    
+    <!-- content end -->
+    
+    
+    <!-- Footer -->
+    <iframe src="../footer.html" frameborder="0" width="100%" height="500px"></iframe>
+</body>
+</html>

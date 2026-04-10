@@ -11,7 +11,8 @@ import { createRoot } from 'react-dom/client'
 // import App from './AppCounter.jsx';
 
 // 4/10 시작
-import App from './AppCounter.jsx';
+// import App from './AppCounter.jsx';
+import App from './AppForm.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

@@ -256,3 +256,18 @@
             배열일 경우 : const [array, setArray] = useState([]);
             객체일 경우 : const [obj, setObj] = useState({});
 
+10. Ref - useRef
+    (1) Ref란?
+        - 실제 DOM 요소를 직접 참조하여 관리하는 기능을 가짐 (= Reference)
+    (2) useRef 사용법
+        import { useRef } from 'react';
+        const nameRef = useRef(null);       // const 로 변수 정의. 객체기 때문에 초기 주소값은 null (undifined X)
+        const handleOnChange = () => {}
+        <input type="text" name="name" ref={nameRef} onChange={handleOnChange} />
+
+            <비교> js / html 형식
+            const name = document.querySelect('#name);
+            name.addEventListener('', () => {});
+
+    (3) DOM 입력폼 값 가져오기 : nameRef.current.value
+        DOM 입력폼 포커스 정의 : nameRef.current.focus()
