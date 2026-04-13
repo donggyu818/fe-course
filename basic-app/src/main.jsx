@@ -12,7 +12,10 @@ import { createRoot } from 'react-dom/client'
 
 // 4/10 시작
 // import App from './AppCounter.jsx';
-import App from './AppForm.jsx';
+// import App from './AppForm.jsx';
+
+// 4/13 시작
+import App from './AppEffect.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

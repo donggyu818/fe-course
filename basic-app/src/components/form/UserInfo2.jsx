@@ -7,10 +7,10 @@ import TextInput2 from "./TextInput2.jsx";
 
 export default function UserInfo2() {
     const forms = [
-        {label:"이름", type:"text", name:'name'},
-        {label:"나이", type:"text", name:'age'},
-        {label:"주소", type:"text", name:'address'},
-        {label:"직업", type:"text", name:'job'}
+        {label:"이름", type:"text", name:'name', isRequired: true},
+        {label:"나이", type:"text", name:'age', isRequired: true},
+        {label:"주소", type:"text", name:'address', isRequired: false},
+        {label:"직업", type:"text", name:'job', isRequired: false}
     ];
     // const nameRef = useRef(null);
     // const ageRef = useRef(null);
@@ -22,7 +22,6 @@ export default function UserInfo2() {
     const handleSubmit = (e) => {
         e.preventDefault(); // 주소 창에 넘어간 내용 보이는 걸 막음
         if (validateUserInfo2(refs)) {       // 위의 함수에서 다 써 있으면 true 가 나오고 실행됨.
-        // if (validateUserInfo(Refs)) {        // Ref 를 객체로 묶어 한 번에 처리했을 경우
             console.log('서버 전송 ! ===> ', form);
         }
     }
@@ -43,10 +42,11 @@ export default function UserInfo2() {
                         {
                             forms.map( (item, idx) => 
                             <li key={idx}>
+                                {item.isRequired ? <span>⚠️</span> : ''}        { /* 필수 입력항목 표시 */}
                                 <label htmlFor="name">{item.label}</label>
                                 { !form?.[item.name]?.trim() && <span style={{color:"red", fontSize:'12px'}}>{item.label}을(를) 입력해주세요</span>}
                                 <div>
-                                    <TextInput2 item={item} value={form[item.name]} handleChange={handleChange} inputRef={ (e) => refs[item.name] = e } />
+                                    <TextInput2 item={item} value={form[item.name]} handleChange={handleChange} inputRef={ (e) => refs.current[item.name] = e } />
                                 </div>
                             </li>
                             )
