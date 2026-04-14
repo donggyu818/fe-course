@@ -15,10 +15,13 @@ import { createRoot } from 'react-dom/client'
 // import App from './AppForm.jsx';
 
 // 4/13 시작
-import App from './AppEffect.jsx';
+// import App from './AppEffect.jsx';
+
+// 4/14 시작
+import App from './AppAirbnb.jsx'
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
+  // <StrictMode>
     <App />
-  </StrictMode>,
+  // </StrictMode>,
 )

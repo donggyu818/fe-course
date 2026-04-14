@@ -1,0 +1,12 @@
+{   
+    "List": [
+        {"img":"people1.webp"},
+        {"img":"people2.webp"},
+        {"img":"people3.webp"}
+    ],
+    "alist": [
+            {"name": "Smith", "img": "/people1.webp"},
+            {"name": "James", "img": "/people2.webp"},
+            {"name": "Anne", "img": "/people3.webp"}    
+        ]
+}

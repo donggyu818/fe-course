@@ -8,7 +8,7 @@ export default function AvatarImageList({imgList}) {
         <div>
             {
                 imgList.map( (item, idx) =>
-                    <AvatarImage img={item.img} style={item.style} key={idx} />     // key : 고유 키가 없다는 창에서 쓸 수 있음
+                    <AvatarImage img={item.img} style={item.style} key={idx} />     // key : 고유 키가 없다는 오류 뜰 때 쓰면 좋음
                 )
             }
         </div>
