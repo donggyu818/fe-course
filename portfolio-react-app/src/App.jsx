@@ -16,10 +16,11 @@ export default function App() {
     loadData();
   } , []);
   
+
   return (
     <>
       <Header data={data?.header} />
-      <Content />
+      <Content data={data?.content}/>
       <Footer />
     </>
   )

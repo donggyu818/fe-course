@@ -9,6 +9,49 @@
             {"href" : "#contact", "style" : "header-menu-item", "name": "Contact"}
         ]
     },
-    "content": {},
+    "content": {
+        "home" : {
+            "img" : "images/favicon.ico",
+            "alt":"photo",
+            "style":"home-avatar",
+            "name":"Judy",
+            "description":"A software engineer currently residing in Seoul, South Korea",
+            "href":"#",
+            "menuName":"contact me"
+        },
+        "about" : {
+            "lorem" : "Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore porro laborum, ut eius blanditiis voluptates officiis, doloribus at autem aliquid consectetur perspiciatis? Sed dolor placeat modi commodi, a alias velit!",
+            "majors" : [
+                {"icon" : "html", "title" : "Front-end", "subjects" : "HTML, CSS, JavaScript, TypeScript, React, WebAPIs"},
+                {"icon" : "mobile", "title" : "Mobile", "subjects" : "Android Studio, React Native, iOS, Swift, Java, kotlin"},
+                {"icon" : "server", "title" : "Back-end", "subjects" : "Java, JavaScript, Go, Kotlin, Spring, Spring Boot"}
+            ],
+            "jobs" : [
+                {"name":"google", "job" : "Google as Junior Software Engineer", 
+                "period" : "2019 Oct - Until now", "img":"images/jobs/google.png", "alt":"google"},
+                {"name":"samsung", "job" : "Samsung as Junior Software Engineer", 
+                "period" : "2010 Oct - 2019 Oct", "img":"images/jobs/samsung.png", "alt":"samsung"}
+            ]
+        },
+    "skills": {
+        "description" : "Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore porro laborum, ut eius blanditiis voluptates officiis, doloribus at autem aliquid consectetur perspiciatis? Sed dolor placeat modi commodi, a alias velit!",
+            "coding": [
+                        { "title":"HTML",       "value": "98%", "width": "98%"},
+                        { "title":"CSS",        "value": "90%", "width": "90%"},
+                        { "title":"JavaScript", "value": "80%", "width": "80%"},
+                        { "title":"TypeScript", "value": "90%", "width": "90%"},
+                        { "title":"React",      "value": "88%", "width": "88%"},
+                        { "title":"Node.js",    "value": "75%", "width": "75%"}
+                    ],
+            "tools": [
+                        "Visual Studio Code",
+                        "IntelliJ",
+                        "Android Studio",
+                        "Eclipse",
+                        "MySQL Workbench"
+                    ],
+            "etc":  [ "Git", "Scrum Master", "SVN"]
+            }
+        },
     "footer": {}
 }
