@@ -21,8 +21,8 @@ export default function App() {
 
   return (
     <>
-      <Header data={data?.header} like={like} />
-      <Outlet context={{data : data?.content, like, setLike}} />{/* 4/17 하나 이상의 데이터를 보낼 때에는 객체로 보내야 함. like = like:like 랑 같음*/}
+      <Header data={data?.header}/>
+      <Outlet context={{data : data?.content}} />{/* 4/17 하나 이상의 데이터를 보낼 때에는 객체로 보내야 함. like = like:like 랑 같음*/}
       {/* <Content data={data?.content}/> */}
       <Footer />  {/* 이거 json 에 옮기는 작업 해야함 */}
     </>

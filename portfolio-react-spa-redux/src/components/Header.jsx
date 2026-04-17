@@ -2,7 +2,7 @@ import Logo from "./header/Logo.jsx";
 import MenuList from "./commons/MenuList.jsx";
 import ToggleButton from "./header/ToggleButton.jsx";
 
-export default function Header({ data, like }) {  // App 에서 data 로 넘김
+export default function Header({ data }) {  // App 에서 data 로 넘김
     // const [ menus ] = data;
     return (
         <header class="header">
@@ -10,7 +10,6 @@ export default function Header({ data, like }) {  // App 에서 data 로 넘김
                     alt="header-logo"
                     style="header-logo-img"
                     title="Judy"
-                    like={like}
             />
             <MenuList menus={data?.menus} style="header-menu open" />
             <ToggleButton />
