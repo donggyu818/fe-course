@@ -1371,5 +1371,392 @@ select * from v_emp_dept, unit u
 -- 휴가사용일수가 15일 이상되는 사원들의 사원명, 부서아이디, 부서명, 본부아이디, 본부명 조회
 select ve.emp_name, ve.dept_id, ve.dept_name, u.unit_id, u.unit_name from v_emp_dept ve, unit u
 		where ve.unit_id = u.unit_id
-			and ve.sum >= 15
-		order by ;
+			and ve.sum >= 15;
+            
+/****************************
+	DDL(Data Definition Language) : 생성, 수정, 삭제 -> 테이블 기준
+    DML(Data Manuplation Language) : 생성, 읽기, 수정, 삭제 -> 데이터 기준
+    C(Create) - Insert 
+    R(Read) - Select
+    U(Update) - Update
+    D(Delete) - Delete
+****************************/
+
+-- 						---------------------- 4/27 시작 -------------------------------
+
+show databases;
+use hrdb2019;
+select database();
+show tables;
+
+/****************************
+	DDL(Data Definition Language) : 생성, 수정, 삭제 -> 테이블 기준
+    테이블 생성 형식 >
+		CREATE TABLE [테이블명] (
+			컬럼명 데이터타입 옵션(제약사항, NULL 등..)
+        )
+        
+					----- 데이터 타입 정리	-----
+	  분류		  타입		크기/형식			설명			   사용예
+    ------------------------------------------------------------------
+    정수형		tinyint		1byte		작은 정수값		상태값(0/1)
+				smallint	2byte						카운트
+				int			4byte		디폴트값			일반정수값
+				bigint		8byte		큰 정수값			pk, 주문번호
+	실수형		float		4byte		부동소수점			거의 사용 안 함
+				double		8byte		디폴트값			통계수치
+	문자형(고정)	char		고정길이	 빠른공간확보, 공간낭비	코드값				char(3) = 3글자만 가능
+	문자형(가변)	varchar		가변길이		가장 많이 사용		이름, 주소, ...		varchar(3) = 1~3 글자 다 가능
+    텍스트		text		~ 64kb		긴 문장 저장		게시글
+				longtext	~ 4GB		초대형 텍스트		로그
+	바이너리		blob		~ 64kb/4GB	이미지파일,파일저장
+    날짜			date		yyyy-mm-dd	날짜				생일
+				datetime	date + 시간	날짜, 시간, ...	작업완료
+	JSON		JSON		JSON 구조	API 데이터처리		API 응답..
+****************************/
+desc employee;
+
+-- emp 테이블 생성
+-- emp_id(사번) : 4, ename(사원명) : 5, hire_date(입사일) : date, salary(급여) : 4
+create table emp(
+	emp_id		char(4),		-- 숫자 타입으로 주려면 '0001' 의 경우 0이 인식이 안 되어 '1' 만 들어감. => 문자형인 char 로 줌
+    ename		varchar(5),
+    hire_date	date,
+    salary		int
+);
+show tables;
+desc emp;
+select * from information_schema.tables
+	where table_schema = 'hrdb2019';
+
+/****************************
+	테이블 삭제
+    형식 > DROP TABLE [테이블명];
+****************************/
+show tables;
+select * from information_schema.tables
+	where table_name = 'emp';
+drop table emp;
+
+/****************************
+	테이블 복제(CAS)
+    형식 > CREATE TABLE [테이블명]
+				AS [서브쿼리];
+****************************/
+-- 2016 년도에 입사한 사원의 정보를 조회하여 EMPLOYEE_2016 테이블 생성
+-- create table employee_2016
+create table employee_2016
+	as
+		select * from employee where left(hire_date, 4) = '2016';
+
+show tables;
+select * from information_schema.tables
+	where table_name = 'employee_2016';
+    
+desc employee_2016;		-- ⚠ 원본의 제약사항은 복제되지 않음!! (key 등)
+desc employee;
+
+-- employee_department 테이블 생성
+-- employee + department 테이블 조인, dept_id 는 하나만 저장
+create table employee_department
+as
+select e.emp_id, e.emp_name, e.gender, e.hire_date, e.retire_date, e.phone, e.email, e.salary, d.dept_id, d.dept_name, d.unit_id, d.start_date
+	from employee e, department d
+	where e.dept_id = d.dept_id;
+
+select * from information_schema.tables
+	where table_name = 'employee_department';
+    
+desc employee_department;
+select * from employee_department;
+
+-- 테이블 구조만 복제
+create table emp
+as
+select * from employee
+	where 1 = 0;
+
+show tables;
+desc emp;
+select * from emp;
+
+/****************************
+	데이터 생성(Create :: Insert)
+    형식 > INSERT INTO [테이블명](컬럼리스트..)	-- 컬럼리스트 생략 가능. 순서 상관 없음.
+			VALUES(데이터1, 데이터2, ...)		-- 위의 컬림리스트와 상대적 위치만 맞으면 됨.
+****************************/
+desc emp;
+insert into emp(emp_id, 	-- char(5)
+				emp_name, 	-- varchar(4)
+				eng_name,	-- varchar(20)
+                gender,		-- char(1)
+                hire_date,	-- date
+                retire_date,-- date (Null 허용이라 Null)
+                dept_id,
+                phone,
+                email,
+                salary)
+		value('S0001', '홍길동', null, 'M', curdate(), null, 'SYS', '010-1234-1234', 'hong@naver.com', null);
+select * from emp;
+
+-- 컬럼리스트 상의 순서와 입력 데이터가 정확히 매핑되어야 함
+insert into emp(emp_id, 	-- char(5)
+				emp_name, 	-- varchar(4)
+				eng_name,	-- varchar(20)
+                gender,		-- char(1)
+                hire_date,	-- date
+                retire_date,-- date (Null 허용이라 Null)
+                dept_id,
+                phone,
+                email,
+                salary)
+		value('S0002', '이순신', null, 'M', curdate(), null, 'SYS', '010-1234-1234', 'hong@naver.com', null);
+        
+-- 컬럼리스트 생략 시 테이블 구조를 기준으로 입력
+desc emp;
+insert into emp
+		value('S0003', '김삼순', null, 'M', curdate(), null, 'SYS', '010-1234-1234', 'hong@naver.com', null);
+select * from emp;
+
+-- Null 허용되는 곳에 한해 컬럼리스트, 데이터 생략 가능
+insert into emp(emp_id, 	-- char(5)
+				emp_name, 	-- varchar(4)
+                gender,		-- char(1)
+                hire_date,	-- date
+                dept_id,
+                phone,
+                email)
+		value('S0004', '삼순신', 'M', curdate(), 'SYS', '010-1234-1234', 'lee@naver.com');
+select * from emp;
+
+/****************************
+	DDL - 테이블의 데이터 절삭(Truncate), 데이터가 영구적으로 삭제됨
+    형식 > TRUNCATE TABLE [테이블명];
+****************************/
+select count(*) from emp;	-- 4개
+select * from emp;
+truncate table emp;
+
+drop table emp;		-- 테이블 삭제
+show tables;
+select * from information_schema.tables
+	where table_name = 'emp';
+
+-- 		---------------------------	여기까지 정리함 -------------------------------------
+
+-- emp 생성 : eid(char, 4), ename(varchar, 5), gender(char, 1)
+-- 			 hire_date(datetime), salary(int)
+-- eid, ename, gender 컬럼은 null 을 허용하지 않음 : not null
+create table emp(
+	eid 	char(4) 	not null,
+    ename	varchar(5) 	not null,
+    gender 	char(1) 	not null,
+    hire_date 	datetime,
+    salary 	int
+    );
+show tables;
+select * from information_schema.tables
+		where table_name = 'emp';
+desc emp;
+insert into emp(
+				eid,
+                ename,
+                gender,
+                hire_date,
+                salary
+			)
+	values('S001', '홍길동', 'M', null, null);
+    
+select * from emp;
+
+insert into emp(eid, ename, gender)
+	values('S002', '이순신', 'M');
+    
+insert into emp(gender, eid, ename, hire_date)
+	values('F', 'S003', '홍길순', curdate());
+    
+insert into emp(eid, ename, gender, hire_date, salary)
+	values('S004', '삼순신', 'M', now(), 1000);
+    
+/****************************
+	자동 번호 생성기 : auto_increment
+    - 테이블 생성 시 옵션 자리에 기술, pk 컬럼에 사용, 정수형 데이터 생성
+    - 반드시 사용 시 반드시 primary key 제약과 함께 사용
+    형식 > CREATE TABLE [테이블명] (
+		컬럼명	데이터타입		AUTO-INCREMENT	...
+        )
+****************************/
+-- emp2 생성 : eid(int, 자동번호 생성), ename(varchar, 5), gender(char, 1)
+-- 			 hire_date(datetime), salary(int)
+-- eid, ename, gender 컬럼은 null 을 허용하지 않음 : not null
+-- 
+
+create table emp2(
+	eid		int		auto_increment	primary key,	-- 자동 값 채우면 어차피 null 이 되지 않음.
+    ename	varchar(5)	not null,
+    gender	char(1)		not null,
+    hire_date	datetime,
+    salary	int
+    );
+    
+show tables;
+select * from information_schema.tables
+		where table_name = 'emp2';
+desc emp2;
+
+insert into emp2(ename, gender)		-- eid 는 자동으로 채워지니 생략 가능.
+		values('홍길동', 'M');
+        
+insert into emp2(ename, gender, hire_date) values('이순신', 'M', now());
+insert into emp2(ename, gender, hire_date, salary) values('김유신', 'M', now(), 3000);
+select * from emp2;
+
+/****************************
+	DDL - 테이블 변경 : ALTER TABLE
+    형식 > ALTER TABLE [테이블명]
+			ADD COLUMN [NEW COLUMN, 데이터 타입] -- NULL 허용
+            MODIFY COLUMN [MODIFY COLUMN, 데이터 타입] -- 크기 고려
+            DROP COLUMN [DROP COULUMN]
+****************************/
+show tables;
+desc emp;
+
+-- emp 테이블에 phone(char, 13, '-'포함) 컬럼을 추가
+alter table emp
+	add column phone char(13);
+
+desc emp;
+select * from emp;
+
+-- phone 컬럼의 크기를 20으로 변경, 크기를 키우는 경우 정상 실행
+alter table emp
+	modify column phone char(20);
+    
+-- ename 컬럼에 데이터가 존재하는 경우
+-- ename 컬럼의 크기를 varchar(2)로 변경, 크기를 작게 변경하는 경우 데이터 유실이 발생하므로 에러 발생.
+alter table emp
+	modify column ename varchar(2) not null;
+-- ename 컬럼의 크기를 varchar(10)로 변경, 크게 변경은 정상 실행
+alter table emp
+	modify column ename varchar(10) not null;
+desc emp;
+
+/****************************
+	데이터 수정 : UPDATE
+    형식 > UPDATE [테이블명]
+			SET [컬럼명 = NEW데이터 , ...]
+            WHERE [조건절]
+	✔ MySQL 은 Update 권한 변경 후 진행
+    => SET SQL_SAFE_UPDATES = 0(허용) / 1(불가, 기본값);
+****************************/
+select * from emp;
+-- S001 사번의 폰번호 업데이트, 업데이트 모드 허용으로 수정
+set sql_safe_updates = 0;
+update emp
+	set phone = '010-1234-4567'
+    where eid = 'S001';
+    
+-- 모든 사원의 폰 번호를 '010-1111-1234' 로 수정
+update emp
+	set phone = '010-1111-1234';
+desc emp;
+
+-- phone 컬럼에 not null 제약을 추가
+alter table emp
+	modify phone char(20) not null;
+    
+-- emp 테이블에 email 컬럼 추가 후 not null 제약 정의
+-- 1) 컬럼 추가 시 null 허용
+-- 2) 업데이트 명령으로 기존 데이터 추가
+-- 3) not null 제약 정의
+alter table emp add email varchar(30);
+desc emp;
+update emp set email = 'test@naver.com';
+alter table emp modify column email varchar(20) not null;
+desc emp;
+
+-- employee 테이블을 복제하여 copy_emp 테이블 생성
+show tables;
+create table copy_emp
+as
+select * from employee;
+
+show tables;
+desc copy_emp;
+select * from copy_emp;
+select count(*) from copy_emp;
+
+-- 홍길동 사원의 급여를 6000 으로 수정
+select emp_id from copy_emp where emp_name = '홍길동';
+update copy_emp set salary = 6000 where emp_id = 'S0001';	-- 고유 키 값인 emp_id 로 해야 불상사가 없음. 예_동명이인이면 둘 다 바뀜.
+select * from copy_emp;
+-- 안경태 사원의 입사일을 '20210705'로 수정
+update copy_emp set hire_date = cast('2021-07-05' as date) where emp_id = 'S0007';	-- cast 함수
+show tables;
+desc emp2;
+-- (1) emp2 테이블에 retire_date 컬럼 추가 : date, null 허용
+-- (2) null 데이터를 현재 날짜로 수정
+-- (3) retire_date 를 'not null' 제약 정의
+select count(*) from emp2;
+
+alter table emp2 add retire_date date;
+update emp2 set retire_date = curdate();
+alter table emp2 modify retire_date date not null;
+
+desc emp2;
+select * from emp2;
+
+-- '정보시스템' 부서의 모든 사원 급여를 20% 증가
+select * from copy_emp;
+update copy_emp
+	set salary = salary * 1.2
+    where dept_id = (select dept_id from department where dept_name = '정보시스템');
+    
+-- 'S0003' 인 강우동 사원의 영어이름을 'kang', 입사일은 현재날짜, 부서를 MKT 로 변경
+select * from copy_emp where emp_id = 'S0003';
+update copy_emp set eng_name = 'kang', hire_date = curdate(), dept_id = 'MKT' where emp_id='S0003';
+select * from copy_emp;
+
+-- 트랜잭션별 업데이트 정의
+-- 트랜잭션 관리 명령어 DTL : commit(작업완료), rollback(작업복원)
+-- 현재 트랜잭션 방식 확인. 1 : 시스템에서 자동으로 트랜잭션 관리
+-- DML 명령어에 영향을 줌, DDL은 관리방식에 상관없이 무조건 autocommit
+select @@autocommit;
+set autocommit = 0;		-- 트랜잭션을 수동으로 관리
+
+commit;		-- 새로운 트랜잭션 시작
+select * from emp;
+
+-- 이순신의 급여를 3000으로 수정
+update emp set salary = 3000 where eid = 'S002';	-- 이러면 값은 바뀌지만 commit 이 수동이므로 되어있기에 임시 데이터임. 물리적 DB에 반영되기 전
+select * from emp;
+-- rollback;
+commit;
+select * from emp;
+rollback;
+
+/****************************
+	데이터 삭제 : DELETE
+    형식 > DELETE FROM [테이블명]
+            WHERE [조건절]
+****************************/
+select @@sql_safe_updates;	-- 업데이트 모드 해제
+select @@autocommit;		-- 수동으로 트랜잭션 관리
+commit;
+
+-- emp 테이블의 이순신, 홍길동 사원을 삭제
+select * from emp;
+delete from emp where eid in('S001', 'S002');
+rollback;		-- commit 되기 전까지 완전 삭제는 안 되기에 롤백하면 다시 돌아옴
+
+commit;			-- commit 후에는 영구히 삭제되어 rollback 해도 돌아오지 않음.
+
+commit;
+-- emp 테이블의 모든 사원을 삭제, truncate 명령어 사용 - truncate 는 바로 commit 되기에 롤백 불가.
+truncate table emp;
+select * from emp;
+rollback;		-- truncate table 명령은 ddl 이므로 autocommit 됨.
+commit;
+
+set autocommit = 1;
+select @@autocommit;
